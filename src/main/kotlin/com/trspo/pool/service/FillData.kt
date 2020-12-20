@@ -2,10 +2,10 @@ package com.trspo.pool.service
 
 class FillData {
     companion object {
-    private var names = arrayListOf("Alex", "Matthew","Andrew","Lili","Kate","Stas","Maria")
-    private var operations = arrayListOf("sent","lent")
+        private var names = arrayListOf("Alex", "Matthew", "Andrew", "Lili", "Kate", "Stas", "Maria")
+        private var operations = arrayListOf("sent", "lent")
 
-        public fun fillTransactionData(): String {
+        fun fillTransactionData(): String {
             val senderName = names.random()
             val receiverName = names.random()
             val operation = operations.random()
