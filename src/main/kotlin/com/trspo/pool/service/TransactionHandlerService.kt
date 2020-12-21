@@ -1,6 +1,7 @@
 package com.trspo.pool.service
 
 import com.google.protobuf.Empty
+import com.trspo.grpc.transaction.TransactionAmountRequest
 import com.trspo.grpc.transaction.TransactionBatchRequest
 import com.trspo.grpc.transaction.TransactionBatchResponse
 import com.trspo.grpc.transaction.TransactionServiceGrpc
@@ -17,18 +18,19 @@ class TransactionHandlerService : TransactionServiceGrpc.TransactionServiceImplB
     @Autowired
     lateinit var transactionRepository: TransactionRepository
 
-    override fun getTransactions(request: Empty, responseObserver: StreamObserver<TransactionBatchResponse>) {
-        val transactions = transactionRepository.getTransactionsBatch(5)
+    override fun getTransactions(transactionAmountRequest: TransactionAmountRequest, responseObserver: StreamObserver<TransactionBatchResponse>){
+        val transactionAmount:Int = transactionAmountRequest.transactionAmount
+        val transactions = transactionRepository.getTransactionsBatch(transactionAmount)
         val batchResponse = Transaction.toTransactionBatchResponse(transactions)
 
         responseObserver.onNext(batchResponse)
         responseObserver.onCompleted()
     }
 
-    override fun returnTransactionsResponse(request: TransactionBatchRequest, responseObserver: StreamObserver<Empty>) {
+    override fun markTransactionMined(request: TransactionBatchRequest, responseObserver: StreamObserver<Empty>) {
         val transactionsToAdd: List<Transaction> = Transaction.fromTransactionBatch(request)
 
-        for (transaction in transactionsToAdd) transactionRepository.save(transaction)
+        for (transaction in transactionsToAdd) transactionRepository.matchTransactionMined(transaction.id)
 
         responseObserver.onNext(Empty.newBuilder().build())
         responseObserver.onCompleted()

@@ -22,6 +22,7 @@ data class Transaction(
 
     @Transient
     val transactionHash:String = hashData()
+    val mined:Boolean = false
 
     private fun hashData(): String {
         val totalData: String = data + id

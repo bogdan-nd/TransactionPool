@@ -11,7 +11,10 @@ import javax.transaction.Transactional
 interface TransactionRepository: JpaRepository<Transaction,UUID> {
 
     @Transactional
-    @Query("SELECT * FROM transaction GROUP BY id,RANDOM() LIMIT :amount",nativeQuery = true)
+    @Query("SELECT * FROM transaction WHERE mined = false GROUP BY id,RANDOM() LIMIT :amount",nativeQuery = true)
     fun getTransactionsBatch(amount:Int):List<Transaction>
 
+    @Transactional
+    @Query("UPDATE transaction SET mined = true WHERE id :=id",nativeQuery = true)
+    fun matchTransactionMined(id:UUID)
 }
