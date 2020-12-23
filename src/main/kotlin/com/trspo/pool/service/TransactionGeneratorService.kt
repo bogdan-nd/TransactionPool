@@ -11,7 +11,7 @@ class TransactionGeneratorService {
     @Autowired
     lateinit var transactionRepository: TransactionRepository
 
-    @Scheduled(fixedRate = 3000)
+    @Scheduled(fixedRate = 4000)
     fun generateTransactions() {
         val transactionData = FillData.fillTransactionData()
         val newTransaction = Transaction(data = transactionData)

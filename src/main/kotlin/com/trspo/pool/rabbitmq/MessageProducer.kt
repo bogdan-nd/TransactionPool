@@ -17,7 +17,7 @@ class MessageProducer {
     lateinit var messageExchange:String
 
     fun sendStartMessage(){
-        rabbitTemplate.convertAndSend(messageExchange,"","abc")
+        rabbitTemplate.convertAndSend(messageExchange,"","send-message")
         print("Send message")
     }
 }
