@@ -30,9 +30,9 @@ class TransactionHandlerService : TransactionServiceGrpc.TransactionServiceImplB
         val transactionsToAdd: List<Transaction> = Transaction.fromTransactionBatch(request)
 
         for (transaction in transactionsToAdd) {
-            val transaction: Transaction = transactionRepository.findByIdOrNull(transaction.id) ?: continue
-            transaction.mined = true
-            transactionRepository.save(transaction)
+            val findTransaction: Transaction = transactionRepository.findByIdOrNull(transaction.id) ?: continue
+            findTransaction.mined = true
+            transactionRepository.save(findTransaction)
         }
 
         responseObserver.onNext(Empty.newBuilder().build())
